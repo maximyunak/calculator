@@ -1,54 +1,43 @@
-# React + TypeScript + Vite
+### Preview
+https://calculator-znhh.vercel.app/
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Getting Started
 
-Currently, two official plugins are available:
+First, run the development server:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 
-## Expanding the ESLint configuration
+Open http://localhost:5173 with your browser to see the result.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+#### Архитектура
+
+```bash
+src/
+├── assets/       # Иконки
+├── components/   # Переиспользуемые UI-компоненты
+├── hooks/        # Кастомные React-хуки
+├── providers/    # Провайдеры контекста (темы)
+├── styles/       # Глобальные стили, переменные CSS, reset-файлы
+├── utils/        # Утилиты и вспомогательные функции
+├── App.tsx       # Главный компонент приложения
+├── main.tsx      # Точка входа
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### Обработка пользовательского ввода
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+[`getCorrectedExpression`](https://github.com/maximyunak/calculator/blob/main/src/utils/get-corrected-expression.ts).
+Эта функция: 
+- Исключает подряд идущие операторы, запрещает вводе нескольких точек в 1 числе, ограничивает ввод значений превышающих Number.MAX_SAFE_INTEGER, предотвращая ошибки в вычислениях
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+#### Вычисление значений
+
+[`calculate`](https://github.com/maximyunak/calculator/blob/main/src/utils/calculate.ts).
+- Обход приоритета операций через цикл, функция последовательно проверяет операторы и применяет к текущему результату.
+
